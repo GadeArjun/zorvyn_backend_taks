@@ -25,7 +25,7 @@ exports.createTransaction = async (req, res) => {
 
     //  Recent Activity
     await RecentActivity.create({
-      user: req.user.id,
+      user: req.user._id,
       action: "CREATE",
       entity: "TRANSACTION",
       entityId: transaction._id,
@@ -85,6 +85,8 @@ exports.getTransactions = async (req, res) => {
       // analyst → use createdBy (admin) id
       createdBy = [user.createdBy];
     }
+
+    createdBy = createdBy.map((id) => new mongoose.Types.ObjectId(id));
 
     const query = {
       isDeleted: false,
@@ -318,15 +320,26 @@ exports.getSummary = async (req, res) => {
       createdBy = [user.createdBy];
     }
 
+    createdBy = createdBy.map((id) => new mongoose.Types.ObjectId(id));
+
     const matchQuery = {
       isDeleted: false,
       createdBy: { $in: createdBy },
     };
 
+    const now = new Date();
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    endOfMonth.setHours(0, 0, 0, 0);
+
     const [
       totals,
       categoryData,
       monthlyTrends,
+      weeklyTrends,
       recentTransactions,
       recentActivity,
     ] = await Promise.all([
@@ -346,7 +359,10 @@ exports.getSummary = async (req, res) => {
         { $match: matchQuery },
         {
           $group: {
-            _id: "$category",
+            _id: {
+              category: "$category",
+              type: "$type",
+            },
             total: { $sum: "$amount" },
           },
         },
@@ -360,6 +376,7 @@ exports.getSummary = async (req, res) => {
             _id: {
               month: { $month: "$transaction_date" },
               year: { $year: "$transaction_date" },
+              type: "$type",
             },
             total: { $sum: "$amount" },
           },
@@ -367,15 +384,42 @@ exports.getSummary = async (req, res) => {
         { $sort: { "_id.year": 1, "_id.month": 1 } },
       ]),
 
+      // weekly transactions for current months
+      Transaction.aggregate([
+        {
+          $match: {
+            ...matchQuery,
+            transaction_date: {
+              $gte: startOfMonth,
+              $lt: endOfMonth,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: {
+              week: { $isoWeek: "$transaction_date" },
+              year: { $isoWeekYear: "$transaction_date" },
+              type: "$type",
+            },
+            total: {
+              $sum: "$amount",
+            },
+          },
+        },
+        { $sort: { "_id.year": 1, "_id.week": 1 } },
+      ]),
+
       // recent transactions
-      Transaction.find(matchQuery).sort({ createdAt: -1 }).limit(5),
+      Transaction.find(matchQuery).sort({ createdAt: -1 }).limit(5).lean(),
 
       //recent activities
       RecentActivity.find({
         user: { $in: createdBy },
       })
         .sort({ createdAt: -1 })
-        .limit(5),
+        .limit(5)
+        .lean(),
     ]);
 
     let income = 0,
@@ -386,15 +430,16 @@ exports.getSummary = async (req, res) => {
       if (item._id === "expense") expense = item.total;
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: "Dashboard summary fetch successfully.",
       data: {
         totalIncome: income,
         totalExpense: expense,
-        netBalance: income - expense,
+        netBalance: Math.max(income - expense, 0),
         categoryBreakdown: categoryData,
         monthlyTrends,
+        weeklyTrends,
         recentTransactions,
         recentActivity,
       },
