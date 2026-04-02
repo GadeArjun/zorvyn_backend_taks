@@ -19,7 +19,7 @@ exports.updateUser = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "User updated successfully",
       user,
@@ -63,7 +63,7 @@ exports.changeUserRole = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "User role updated successfully",
       user,
@@ -97,7 +97,7 @@ exports.deleteUser = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "User deleted (soft) successfully",
     });
@@ -140,7 +140,7 @@ exports.resetPasswordByAdmin = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "Password reset successfully",
     });

@@ -39,7 +39,7 @@ exports.authorizeRole = (roles = []) => {
     try {
       const userRole = req.user.role;
       if (!userRole) {
-        return res.json({
+        return res.status(404).json({
           success: false,
           message: "User role not found",
         });

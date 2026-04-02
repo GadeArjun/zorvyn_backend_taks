@@ -40,6 +40,8 @@ const transactionSchema = new Schema(
   }
 );
 
+transactionSchema.index({ createdBy: 1, transaction_date: -1 });
+
 const Transaction = mongoose.model("Transaction", transactionSchema);
 
 exports.Transaction = Transaction;

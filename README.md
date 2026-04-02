@@ -29,7 +29,6 @@ A scalable, secure backend REST API for managing financial transactions. This sy
 - **Runtime Environment:** Node.js
 - **Framework:** Express.js
 - **Database:** MongoDB
-- **ODM:** Mongoose
 - **Authentication:** JSON Web Tokens (JWT)
 - **Documentation:** Swagger (OpenAPI)
 
@@ -97,6 +96,52 @@ const authLimiter = rateLimit({
 - Enhances security against brute-force attacks
 
 ---
+
+## 🧠 Assumptions
+
+1. **Roles & Permissions**
+
+   - Admin: Full access (create/update/delete users and transactions, view dashboard).
+   - Analyst: Can view transactions and dashboard, but cannot create or update users or transactions.
+   - Viewer: Read-only access to dashboard data.
+
+2. **Transaction Ownership**
+
+   - Every transaction is linked to the user who created it (`createdBy`).
+   - Analysts can only view transactions created by their parent admin.
+   - Admins can view their own transactions and those of their analysts.
+
+3. **Soft Delete**
+
+   - Users and transactions are never permanently deleted.
+   - Deleted items are flagged (`isDeleted = true`) and hidden from API responses.
+   - This ensures auditability and data integrity.
+
+4. **Authentication**
+
+   - JWT is used for authentication with a single token type (no refresh tokens).
+   - All protected routes require `Authorization: Bearer <JWT>` header.
+
+5. **Filtering & Pagination**
+
+   - Transactions support filtering by type, category, date range, and pagination using `page` and `limit`.
+   - Default page = 1, default limit = 10 if not provided.
+
+6. **Data Visibility**
+
+   - Dashboard summaries only show data visible to the logged-in user based on role and the data is from the admin who add / create the transactions.
+   - Viewer sees aggregated totals, Analyst sees their admin’s data, Admin sees their own + their analysts’ data.
+
+7. **Rate Limiting**
+
+   - General API: 150 requests per 15 minutes.
+   - Auth routes: 20 requests per 15 minutes to prevent brute-force attacks.
+
+8. **Swagger Documentation**
+
+   - All endpoints are fully documented and testable through `/api-docs`.
+
+   ***
 
 ## ⚙️ Local Installation & Setup
 

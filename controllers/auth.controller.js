@@ -12,7 +12,7 @@ exports.createNewAdminUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "name, email, and password. This all fields are required",
       });
@@ -38,7 +38,7 @@ exports.createNewAdminUser = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "User with these email already exists.",
       });
@@ -76,7 +76,7 @@ exports.createNewUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     if (!name || !email || !password || !role) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "name, email, password and role. This all fields are required",
       });
@@ -102,7 +102,7 @@ exports.createNewUser = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "User with these email already exists.",
       });
@@ -155,7 +155,7 @@ exports.loginUser = async (req, res) => {
 
     const isVerify = await verifyPassword(password, user.password);
     if (!isVerify) {
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "Password is wrong, check and try again.",
       });

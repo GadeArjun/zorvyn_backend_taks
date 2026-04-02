@@ -55,7 +55,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // health route
 app.get("/health", (req, res) => {
-  res.json({
+  res.status(200).json({
     message: "Ok",
     success: true,
   });

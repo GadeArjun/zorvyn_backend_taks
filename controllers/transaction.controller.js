@@ -109,7 +109,7 @@ exports.getTransactions = async (req, res) => {
 
     const total = await Transaction.countDocuments(query);
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Transaction record fetch successfully.",
       total,
@@ -153,9 +153,10 @@ exports.getTransactionById = async (req, res) => {
     }
 
     // ✅ 4. Success
-    res.json({
+    res.status(200).json({
       success: true,
       data: transaction,
+      message: "Transaction fetch successfully.",
     });
   } catch (err) {
     console.error(`Error fetching transaction: ${err.message}`, { err });
@@ -219,7 +220,7 @@ exports.updateTransaction = async (req, res) => {
     });
 
     // ✅ 5. Response
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Transaction record updated successfully.",
       data: updatedTransaction,
@@ -282,7 +283,7 @@ exports.deleteTransaction = async (req, res) => {
     });
 
     // ✅ 5. Response
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Transaction deleted successfully",
     });
@@ -430,7 +431,7 @@ exports.getSummary = async (req, res) => {
       if (item._id === "expense") expense = item.total;
     });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "Dashboard summary fetch successfully.",
       data: {
