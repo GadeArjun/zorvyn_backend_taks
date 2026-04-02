@@ -66,7 +66,7 @@ exports.changeUserRole = async (req, res) => {
 
     // log
     await RecentActivity.create({
-      user: userId,
+      user: req.user._id,
       action: "UPDATE",
       entity: "USER",
       entityId: user._id,
@@ -109,7 +109,7 @@ exports.deleteUser = async (req, res) => {
 
     // log
     await RecentActivity.create({
-      user: userId,
+      user: req.user._id,
       action: "DELETE",
       entity: "USER",
       entityId: user._id,
@@ -161,7 +161,7 @@ exports.resetPasswordByAdmin = async (req, res) => {
 
     // log
     await RecentActivity.create({
-      user: userId,
+      user: req.user._id,
       action: "UPDATE",
       entity: "USER",
       entityId: user._id,
