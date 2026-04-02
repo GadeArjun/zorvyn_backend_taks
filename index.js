@@ -10,9 +10,13 @@ app.use(express.json());
 app.use(cors());
 connectDB();
 
+// auth route
 app.use("/api/auth", authRouter);
+
+//user route
 app.use("/api/user", userRouter);
 
+// health route
 app.get("/health", (req, res) => {
   res.json({
     message: "Ok",
