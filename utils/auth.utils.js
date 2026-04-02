@@ -24,7 +24,7 @@ exports.validatePassword = (password) => {
 
   const minLength = 8;
   const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]+$/;
 
   if (password.length < minLength) {
     return {
@@ -57,8 +57,8 @@ exports.decodeToken = (token) => {
 };
 
 // hash password
-exports.hashPassword = async (passoword) => {
-  const hashPassword = await bcrypt.hash(passoword, 10);
+exports.hashPassword = async (password) => {
+  const hashPassword = await bcrypt.hash(password, 10);
   return hashPassword;
 };
 
