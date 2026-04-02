@@ -3,6 +3,8 @@ const {
   hashPassword,
   verifyPassword,
   generateToken,
+  validatePassword,
+  validateEmail,
 } = require("../utils/auth.utils");
 
 // create new admin user fucntion
@@ -13,6 +15,24 @@ exports.createNewAdminUser = async (req, res) => {
       return res.json({
         success: false,
         message: "name, email, and password. This all fields are required",
+      });
+    }
+
+    // eamil validation
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: emailCheck.message,
+      });
+    }
+
+    // password validation
+    const passwordCheck = validatePassword(password);
+    if (!passwordCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordCheck.message,
       });
     }
 
@@ -62,6 +82,24 @@ exports.createNewUser = async (req, res) => {
       });
     }
 
+    // eamil validation
+    const emailCheck = validateEmail(email);
+    if (!emailCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: emailCheck.message,
+      });
+    }
+
+    // password validation
+    const passwordCheck = validatePassword(password);
+    if (!passwordCheck.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordCheck.message,
+      });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.json({
@@ -106,7 +144,7 @@ exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).lean();
+    const user = await User.findOne({ email, isDeleted: false }).lean();
 
     if (!user) {
       return res.status(404).json({
@@ -125,7 +163,7 @@ exports.loginUser = async (req, res) => {
 
     const token = generateToken(user);
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: "Login successfully!",
       token,

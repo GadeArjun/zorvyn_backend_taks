@@ -1,6 +1,49 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const validator = require("validator");
+
+// validate email
+exports.validateEmail = (email) => {
+  if (!email) {
+    return { valid: false, message: "Email is required" };
+  }
+
+  if (!validator.isEmail(email)) {
+    return { valid: false, message: "Invalid email format" };
+  }
+
+  return { valid: true };
+};
+
+// validate password
+exports.validatePassword = (password) => {
+  if (!password) {
+    return { valid: false, message: "Password is required" };
+  }
+
+  const minLength = 8;
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+
+  if (password.length < minLength) {
+    return {
+      valid: false,
+      message: "Password must be at least 8 characters long",
+    };
+  }
+
+  if (!regex.test(password)) {
+    return {
+      valid: false,
+      message:
+        "Password must include uppercase, lowercase, number and special character",
+    };
+  }
+
+  return { valid: true };
+};
+
 // generate token using user data
 
 exports.generateToken = (data) => {
