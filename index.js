@@ -1,22 +1,20 @@
-const express = require('express');
-const path = require('path')
+const express = require("express");
+const cors = require("cors");
+const { connectDB } = require("./config/db");
+require("dotenv").config();
 
 const app = express();
+app.use(express.json());
+app.use(cors);
 
-const port = parseInt(process.env.PORT) || process.argv[3] || 8080;
-
-app.use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs');
-
-app.get('/', (req, res) => {
-  res.render('index');
+app.get("/health", (req, res) => {
+  res.json({
+    message: "Ok",
+    success: true,
+  });
 });
 
-app.get('/api', (req, res) => {
-  res.json({"msg": "Hello world"});
+connectDB();
+app.listen(process.env.PORT, () => {
+  console.log(`server is running on http://localhost:${process.env.PORT}`);
 });
-
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
-})
