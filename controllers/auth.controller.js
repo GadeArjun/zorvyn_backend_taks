@@ -86,6 +86,7 @@ exports.createNewUser = async (req, res) => {
       success: true,
       message:
         "User create successfully. Now you can share creadiantial to user to access dashboard.",
+      user,
     });
   } catch (err) {
     console.error(`Error while creating user, message: ${err.message}`, {
