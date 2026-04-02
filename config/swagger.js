@@ -26,16 +26,16 @@ const options = {
 
     servers: [
       {
+        url: "https://zorvyn-backend-taks.onrender.com",
+        description: "Hosted render's server",
+      },
+      {
         url: "http://localhost:8080",
         description: "Local Development Server",
       },
       {
         url: "https://8080-firebase-zorvynbackendtask-1775105333894.cluster-yylgzpipxrar4v4a72liastuqy.cloudworkstations.dev",
         description: "Cloud Server",
-      },
-      {
-        url: "https://zorvyn-backend-taks.onrender.com",
-        description: "Hosted render's server",
       },
     ],
 
