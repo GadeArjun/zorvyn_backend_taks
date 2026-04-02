@@ -6,6 +6,9 @@ const { userRouter } = require("./routes/user.routes");
 const { transactionRouter } = require("./routes/transaction.routes");
 require("dotenv").config();
 
+const swaggerUi = require("swagger-ui-express");
+const { swaggerSpec } = require("./config/swagger");
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -19,6 +22,9 @@ app.use("/api/user", userRouter);
 
 // transaction route
 app.use("/api/transaction", transactionRouter);
+
+// swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // health route
 app.get("/health", (req, res) => {
