@@ -1,33 +1,43 @@
-const { Schema, default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    username: {
+    name: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
-      unique: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
       unique: true,
     },
     password: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
-    roles: {
+    role: {
+      type: String,
       enum: ["viewer", "analyst", "admin"],
-      require: true,
+      required: true,
       default: "viewer",
     },
     isActive: {
       type: Boolean,
+      default: true,
+      required: true,
+    },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    isDeleted: {
+      type: Boolean,
       default: false,
-      require: true,
     },
   },
   {

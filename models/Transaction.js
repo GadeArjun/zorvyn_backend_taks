@@ -1,14 +1,15 @@
-const { Schema, default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const transactionSchema = new Schema(
   {
     amount: {
       type: Number,
-      require: true,
+      required: true,
     },
     type: {
       enum: ["income", "expense"],
-      require: true,
+      required: true,
     },
     category: {
       type: String,
@@ -21,12 +22,16 @@ const transactionSchema = new Schema(
     transaction_date: {
       type: Date,
       default: new Date(),
-      require: true,
+      required: true,
     },
     createdBy: {
       type: mongoose.Types.ObjectId,
-      require: true,
+      required: true,
       ref: "User",
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
