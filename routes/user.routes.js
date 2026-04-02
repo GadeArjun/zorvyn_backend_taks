@@ -9,17 +9,15 @@ const {
 
 const router = express.Router();
 
-router.post("/update/:userId", protect, authorizeRole(["admin"]), updateUser);
-
-router.delete("/delete/:userId", protect, authorizeRole(["admin"]), deleteUser);
-
-router.post("/role/:userId", protect, authorizeRole(["admin"]), changeUserRole);
-
-router.post(
-  "/reset-password/admin/:userId",
-  protect,
-  authorizeRole(["admin"]),
-  resetPasswordByAdmin
-);
+router
+  .post("/update/:userId", protect, authorizeRole(["admin"]), updateUser)
+  .delete("/delete/:userId", protect, authorizeRole(["admin"]), deleteUser)
+  .post("/role/:userId", protect, authorizeRole(["admin"]), changeUserRole)
+  .post(
+    "/reset-password/admin/:userId",
+    protect,
+    authorizeRole(["admin"]),
+    resetPasswordByAdmin
+  );
 
 exports.userRouter = router;

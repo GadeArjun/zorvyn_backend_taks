@@ -5,7 +5,7 @@ exports.protect = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(403).json({
+      return res.status(401).json({
         success: false,
         message: "Unauthorized. Please login.",
       });
@@ -48,7 +48,7 @@ exports.authorizeRole = (roles = []) => {
       if (!roles.includes(userRole)) {
         return res.status(403).json({
           success: false,
-          message: "Forbidden: Your are not authorize persone for these actio.",
+          message: "Forbidden: You are not authorized to perform this action.",
         });
       }
 

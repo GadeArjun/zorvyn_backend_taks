@@ -3,6 +3,7 @@ const cors = require("cors");
 const { connectDB } = require("./config/db");
 const { authRouter } = require("./routes/auth.routes");
 const { userRouter } = require("./routes/user.routes");
+const { transactionRouter } = require("./routes/transaction.routes");
 require("dotenv").config();
 
 const app = express();
@@ -15,6 +16,9 @@ app.use("/api/auth", authRouter);
 
 //user route
 app.use("/api/user", userRouter);
+
+// transaction route
+app.use("/api/transaction", transactionRouter);
 
 // health route
 app.get("/health", (req, res) => {

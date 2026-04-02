@@ -8,6 +8,7 @@ const transactionSchema = new Schema(
       required: true,
     },
     type: {
+      type: String,
       enum: ["income", "expense"],
       required: true,
     },
@@ -21,7 +22,7 @@ const transactionSchema = new Schema(
     },
     transaction_date: {
       type: Date,
-      default: new Date(),
+      default: Date.now,
       required: true,
     },
     createdBy: {
