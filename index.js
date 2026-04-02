@@ -53,6 +53,15 @@ app.use("/api/transaction", transactionRouter);
 // swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// / route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message:
+      "To view api docs use these link: https://zorvyn-backend-taks.onrender.com/api-docs",
+  });
+});
+
 // health route
 app.get("/health", (req, res) => {
   res.status(200).json({

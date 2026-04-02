@@ -141,7 +141,13 @@ const authLimiter = rateLimit({
 
    - All endpoints are fully documented and testable through `/api-docs`.
 
-   ***
+---
+
+## Hosted Backend URL - Render
+
+```bash
+https://zorvyn-backend-taks.onrender.com/api-docs
+```
 
 ## ⚙️ Local Installation & Setup
 
