@@ -1,3 +1,4 @@
+const { RecentActivity } = require("../models/RecentActivity");
 const { User } = require("../models/User");
 const {
   hashPassword,
@@ -119,6 +120,15 @@ exports.createNewUser = async (req, res) => {
     });
 
     await user.save();
+
+    // log
+    await RecentActivity.create({
+      user: req.user._id,
+      action: "CREATE",
+      entity: "USER",
+      entityId: user._id,
+      details: "Create new user",
+    });
 
     return res.status(201).json({
       success: true,
