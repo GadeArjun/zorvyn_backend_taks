@@ -1,3 +1,4 @@
+const { RecentActivity } = require("../models/RecentActivity");
 const { User } = require("../models/User");
 const { hashPassword } = require("../utils/auth.utils");
 
@@ -63,6 +64,15 @@ exports.changeUserRole = async (req, res) => {
       });
     }
 
+    // log
+    await RecentActivity.create({
+      user: userId,
+      action: "UPDATE",
+      entity: "USER",
+      entityId: user._id,
+      details: "Update user's role",
+    });
+
     return res.status(200).json({
       success: true,
       message: "User role updated successfully",
@@ -96,6 +106,15 @@ exports.deleteUser = async (req, res) => {
         message: "User not found",
       });
     }
+
+    // log
+    await RecentActivity.create({
+      user: userId,
+      action: "DELETE",
+      entity: "USER",
+      entityId: user._id,
+      details: "Delete user (Soft)",
+    });
 
     return res.status(200).json({
       success: true,
@@ -139,6 +158,15 @@ exports.resetPasswordByAdmin = async (req, res) => {
         message: "User not found",
       });
     }
+
+    // log
+    await RecentActivity.create({
+      user: userId,
+      action: "UPDATE",
+      entity: "USER",
+      entityId: user._id,
+      details: "Reset user's password",
+    });
 
     return res.status(200).json({
       success: true,
