@@ -143,6 +143,43 @@ const authLimiter = rateLimit({
 
 ---
 
+## ⚖️ Tradeoffs
+
+1. **JWT Without Refresh Tokens**
+
+   - Used simple JWT authentication without refresh tokens.
+   - This keeps the implementation simple for the assignment.
+   - In a production system, refresh tokens would be added for better security and session management.
+
+2. **No Caching Layer**
+
+   - Dashboard aggregation queries run directly on MongoDB.
+   - This is sufficient for small to medium datasets.
+   - In a real system, caching (e.g., Redis) would be used to improve performance.
+
+3. **Limited Validation Layer**
+
+   - Validation is handled manually inside controllers.
+   - This keeps the code simple and readable.
+
+4. **No Unit or Integration Tests**
+
+   - As off now I am no familiar as much with Testing.
+   - In a real-world system, automated testing would be essential for reliability.
+
+5. **Single Service Architecture**
+
+   - The project is built as a monolithic backend.
+   - This is easier to manage for small applications.
+   - For large-scale systems, microservices or modular services could be used.
+
+6. **Basic Error Handling**
+
+   - Errors are handled at the controller level.
+   - A centralized error-handling middleware would improve consistency in larger systems.
+
+   ***
+
 ## Hosted Backend URL - Render
 
 ```bash
