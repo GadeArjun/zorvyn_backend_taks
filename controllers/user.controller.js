@@ -19,20 +19,25 @@ exports.updateUser = async (req, res) => {
       });
     }
 
-    // eamil validation
-    const emailCheck = validateEmail(email);
-    if (!emailCheck.valid) {
-      return res.status(400).json({
-        success: false,
-        message: emailCheck.message,
-      });
+    const updateData = {};
+
+    if (name) updateData.name = name;
+
+    if (email) {
+      const emailCheck = validateEmail(email);
+      if (!emailCheck.valid) {
+        return res.status(400).json({
+          success: false,
+          message: emailCheck.message,
+        });
+      }
+      updateData.email = email;
     }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { name, email },
-      { returnDocument: "after", runValidators: true }
-    );
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      returnDocument: "after",
+      runValidators: true,
+    });
 
     if (!user) {
       return res.status(404).json({
