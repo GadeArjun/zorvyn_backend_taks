@@ -1,7 +1,11 @@
 const { default: mongoose } = require("mongoose");
 const { RecentActivity } = require("../models/RecentActivity");
 const { User } = require("../models/User");
-const { hashPassword } = require("../utils/auth.utils");
+const {
+  hashPassword,
+  validateEmail,
+  validatePassword,
+} = require("../utils/auth.utils");
 
 exports.updateUser = async (req, res) => {
   try {
