@@ -164,7 +164,7 @@ const authLimiter = rateLimit({
 
 4. **No Unit or Integration Tests**
 
-   - As off now I am no familiar as much with Testing.
+   - Automated testing has not been implemented in this version to keep the project focused on core backend functionality.
    - In a real-world system, automated testing would be essential for reliability.
 
 5. **Single Service Architecture**
