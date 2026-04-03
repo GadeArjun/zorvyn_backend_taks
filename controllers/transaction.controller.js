@@ -90,7 +90,7 @@ exports.getTransactions = async (req, res) => {
 
     const query = {
       isDeleted: false,
-      createdBy: { $in: createdBy }, // ✅ FIXED
+      createdBy: { $in: createdBy }, //  FIXED
     };
 
     if (type) query.type = type;
@@ -131,7 +131,7 @@ exports.getTransactionById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ✅ 1. Validate ObjectId
+    //  1. Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -139,7 +139,7 @@ exports.getTransactionById = async (req, res) => {
       });
     }
 
-    // ✅ 2. Find transaction
+    //  2. Find transaction
     const transaction = await Transaction.findOne({
       _id: id,
       isDeleted: false,
@@ -152,7 +152,7 @@ exports.getTransactionById = async (req, res) => {
       });
     }
 
-    // ✅ 4. Success
+    //  4. Success
     res.status(200).json({
       success: true,
       data: transaction,
@@ -174,7 +174,7 @@ exports.updateTransaction = async (req, res) => {
     const { id } = req.params;
     const userId = req.user._id;
 
-    // ✅ 1. Validate ObjectId
+    //  1. Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -182,7 +182,7 @@ exports.updateTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 2. Find transaction
+    //  2. Find transaction
     const transaction = await Transaction.findOne({
       _id: id,
       isDeleted: false,
@@ -195,7 +195,7 @@ exports.updateTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 3. Ownership check (only creator can update)
+    //  3. Ownership check (only creator can update)
     if (transaction.createdBy.toString() !== userId.toString()) {
       return res.status(403).json({
         success: false,
@@ -203,14 +203,14 @@ exports.updateTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 4. Update
+    //  4. Update
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       id,
       req.body,
       { returnDocument: "after", runValidators: true }
     );
 
-    // 🔥 Activity
+    //  Activity
     await RecentActivity.create({
       user: userId,
       action: "UPDATE",
@@ -219,7 +219,7 @@ exports.updateTransaction = async (req, res) => {
       details: "Updated transaction",
     });
 
-    // ✅ 5. Response
+    //  5. Response
     res.status(200).json({
       success: true,
       message: "Transaction record updated successfully.",
@@ -241,7 +241,7 @@ exports.deleteTransaction = async (req, res) => {
     const { id } = req.params;
     const userId = req.user._id;
 
-    // ✅ 1. Validate ObjectId
+    //  1. Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -249,7 +249,7 @@ exports.deleteTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 2. Find transaction
+    //  2. Find transaction
     const transaction = await Transaction.findOne({
       _id: id,
       isDeleted: false,
@@ -262,7 +262,7 @@ exports.deleteTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 3. Ownership check
+    //  3. Ownership check
     if (transaction.createdBy.toString() !== userId.toString()) {
       return res.status(403).json({
         success: false,
@@ -270,10 +270,10 @@ exports.deleteTransaction = async (req, res) => {
       });
     }
 
-    // ✅ 4. Soft delete
+    //  4. Soft delete
     await Transaction.findByIdAndUpdate(id, { isDeleted: true });
 
-    // 🔥 Activity log
+    //  Activity log
     await RecentActivity.create({
       user: userId,
       action: "DELETE",
@@ -282,7 +282,7 @@ exports.deleteTransaction = async (req, res) => {
       details: "Deleted transaction",
     });
 
-    // ✅ 5. Response
+    //  5. Response
     res.status(200).json({
       success: true,
       message: "Transaction deleted successfully",

@@ -63,7 +63,7 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         },
       },
 
-      // 🔥 OPTIONAL (but recommended schemas)
+      //  OPTIONAL (but recommended schemas)
       schemas: {
         User: {
           type: "object",
